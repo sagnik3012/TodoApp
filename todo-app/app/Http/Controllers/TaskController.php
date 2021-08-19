@@ -4,22 +4,27 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
+use App\Services\TasksService;
 class TaskController extends Controller
 {
     // create a single task
+    protected $tasksService;
+
+
+    public function __construct(TasksService $tasksService)
+    {
+        $this->tasksService = $tasksService;
+    }
     public function createTask(Request $request){
 
-        $taskName = $request->input('task_name');
-        $taskDescription = $request->input('description');
-        $taskStatus = $request->input('status');
-        $data = array('task_name'=>$taskName , 'description'=>$taskDescription , 'status'=>$taskStatus);
-        $id = DB::table('tasks')->insertGetId($data);
+
+        $id = $this->tasksService->createTask($request);
         return response()->json([
             'id'=>$id,
-            'task_name' => $taskName,
-            'description'=>$taskDescription,
-            'message'=>"successfully created!"
+            'task_name' => $request->input('task_name'),
+            'description'=>$request->input('description'),
+            'status' => $request->input('status'),
+            'message'=>"successfully created!",
         ]);
     }
     // create multiple tasks
