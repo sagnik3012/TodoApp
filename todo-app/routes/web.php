@@ -22,7 +22,7 @@ Route::post('tasks/single' , [TaskController::class , 'createTask']);
 Route::post('tasks', [TaskController::class, 'createTasks']);
 Route::get('tasks/{id}', [TaskController::class, 'getTaskById']);
 Route::get('tasks', [TaskController::class, 'viewAllTasks']);
-Route::patch('tasks/{id}', [TaskController::class, 'editTaskStatus']);
+Route::patch('tasks/{id}', [TaskController::class, 'editTaskStatusById']);
 Route::delete('tasks/{id}', [TaskController::class, 'deleteTask']);
 
 
