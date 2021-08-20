@@ -7,6 +7,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Services\TasksService;
+use Illuminate\Validation\Rule;
 class TaskController extends Controller
 {
     // create a single task
@@ -17,26 +18,54 @@ class TaskController extends Controller
     {
         $this->tasksService = $tasksService;
     }
-    public function createTask(Request $request){
+
+    // create a task
+    public function CreateTask(Request $request){
 
         $validator = Validator::make($request->all(), [
             'task_name' => 'required|unique:tasks',
             'description' => 'required',
-            'status'=>'required'
+            'status' => ['required',Rule:: in(['Pending','In Progress','Done'])]
         ]);
         if ($validator->fails()) {
             return response()->json($validator->errors(),Response::HTTP_BAD_REQUEST);
         }
 
-        $task = $this->tasksService->createTask($request);
-        return response()->json([
-            "task" => $task
-        ]);
+        return $this->tasksService->createTask($request->input('task_name'),$request->input('description'),$request->input('status'));
+    }
+    // get a task by its id
+    public function GetTaskById( $id){
+
+        return $this->tasksService->getTaskById($id);
+
+    }
+    // delete a task by its id
+    public function DeleteTaskById( $id){
+
+        return $this->tasksService->deleteTaskById($id);
+
+    }
+    // get list of all tasks
+    public function ViewAllTasks( ){
+
+        return  $this->tasksService->getAllTasks();
 
 
     }
-    // create multiple tasks
-    public function createTasks( Request $request){
+    // edit task status for a particular task
+    public function EditTaskStatusById( Request $request , $id){
+        $validator = Validator::make($request->all(), [
+            'status' => ['required',Rule:: in(['Pending','In Progress','Done'])]
+        ]);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(),Response::HTTP_BAD_REQUEST);
+        }
+        return $this->tasksService->editTaskStatusById($request , $id);
+    }
+
+
+    // extra to create multiple tasks
+/*    public function createTasks( Request $request){
 
         $responses = [];
         $allTasks = $request->input('tasks');
@@ -57,55 +86,5 @@ class TaskController extends Controller
 
         ],Response::HTTP_CREATED);
 
-    }
-    public function getTaskById( $id){
-
-        $resp = $this->tasksService->getTaskById($id);
-
-        if ( $resp == false ){
-            return response()->json([
-                "message" => "task with id = $id doesn't exist!"
-            ]);
-        }
-        return response()->json([
-            "task" => $resp
-        ]);
-
-    }
-    public function deleteTask( $id){
-
-
-        $resp = $this->tasksService->deleteTaskById($id);
-        if ( $resp == false){
-            return response()->json([
-                "message" => "task with id = $id doesn't exits!!"],Response::HTTP_NOT_FOUND
-            );
-        }
-        return response()->json([
-            "message" => "task with id = $id is successfully deleted!"
-        ]);
-
-    }
-    public function viewAllTasks( ){
-
-        $tasks = $this->tasksService->getAllTasks();
-        if ( $tasks == false){
-            return response()->json([
-                "message"=>"no tasks found!"
-            ],Response::HTTP_NOT_FOUND);
-        }
-        return response()->json([
-            "tasks" => $tasks
-        ],Response::HTTP_OK);
-
-    }
-    public function editTaskStatusById( Request $request , $id){
-        $validator = Validator::make($request->all(), [
-            'status'=>'required'
-        ]);
-        if ($validator->fails()) {
-            return response()->json($validator->errors(),Response::HTTP_BAD_REQUEST);
-        }
-        return $this->tasksService->editTaskStatusById($request , $id);
-    }
+    }*/
 }

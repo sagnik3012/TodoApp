@@ -18,11 +18,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::post('tasks/single' , [TaskController::class , 'createTask']);
-Route::post('tasks', [TaskController::class, 'createTasks']);
-Route::get('tasks/{id}', [TaskController::class, 'getTaskById']);
-Route::get('tasks', [TaskController::class, 'viewAllTasks']);
-Route::patch('tasks/{id}', [TaskController::class, 'editTaskStatusById']);
-Route::delete('tasks/{id}', [TaskController::class, 'deleteTask']);
+Route::post('task' , [TaskController::class , 'CreateTask']);
+//Route::post('tasks', [TaskController::class, 'createTasks']);
+Route::get('task/{id}', [TaskController::class, 'GetTaskById']);
+Route::get('task', [TaskController::class, 'ViewAllTasks']);
+Route::patch('task/{id}', [TaskController::class, 'EditTaskStatusById']);
+Route::delete('task/{id}', [TaskController::class, 'DeleteTaskById']);
 
 
