@@ -19,19 +19,19 @@ class TasksService{
 
         $data = array('task_name'=>$taskName , 'description'=>$taskDescription , 'status'=>$taskStatus);
         try{
-            $id =  Tasks::insertGetId($data);
+            $task =  Tasks::create($data);
         } catch(QueryException $e){
             return response()->json($e->errorInfo , Response::HTTP_BAD_REQUEST);
         }
 
-        $task =  Tasks::find($id); // Tasks::
+
         return response()->json($task,Response::HTTP_CREATED);
 
     }
     public function getTaskById( $id ){
 
         try{
-            $task = DB::table('tasks')->where('id',$id)->get();
+            $task = Tasks::where('id',$id)->get();
         } catch (QueryException $e){
             return response()->json($e->errorInfo,Response::HTTP_BAD_REQUEST);
         }
@@ -39,13 +39,13 @@ class TasksService{
         if (count($task) == 0){
             return response()->json(["message"=>"task with id = $id doesn't exist!"],Response::HTTP_NOT_FOUND);
         }
-        return response()->json($task,Response::HTTP_OK);
+        return response()->json($task[0],Response::HTTP_OK);
 
     }
     public function deleteTaskById($id){
 
         try{
-            $task = DB::table('tasks')->where('id',$id)->get();
+            $task = Tasks::where('id',$id)->get();
         } catch (QueryException $e){
             return response()->json($e->errorInfo , Response::HTTP_BAD_REQUEST);
         }
@@ -64,7 +64,7 @@ class TasksService{
     }
     public function getAllTasks(){
         try{
-            $tasks = DB::table('tasks')->get();
+            $tasks = Tasks::get();
         }catch (QueryException $e){
             return response()->json($e->errorInfo , Response::HTTP_BAD_REQUEST);
         }
@@ -80,11 +80,11 @@ class TasksService{
             return  response()->json(["message" => "please check task status field and retry!"],Response::HTTP_BAD_REQUEST);
         }
         try{
-            DB::table('tasks')->where('id',$id)->update(['status'=>$newStatus]);
+            Tasks::where('id',$id)->update(['status'=>$newStatus]);
         } catch (QueryException $e){
             return response()->json($e->errorInfo, Response::HTTP_BAD_REQUEST);
         }
-        $updatedTask = DB::table('tasks')->find($id);
+        $updatedTask = Tasks::find($id);
         return  response()->json(["updated task" => $updatedTask],Response::HTTP_OK);
     }
 

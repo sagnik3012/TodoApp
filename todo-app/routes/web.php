@@ -19,7 +19,6 @@ Route::get('/', function () {
 });
 
 Route::post('task' , [TaskController::class , 'CreateTask']);
-//Route::post('tasks', [TaskController::class, 'createTasks']);
 Route::get('task/{id}', [TaskController::class, 'GetTaskById']);
 Route::get('task', [TaskController::class, 'ViewAllTasks']);
 Route::patch('task/{id}', [TaskController::class, 'EditTaskStatusById']);

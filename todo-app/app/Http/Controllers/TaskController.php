@@ -25,7 +25,7 @@ class TaskController extends Controller
         $validator = Validator::make($request->all(), [
             'task_name' => 'required|unique:tasks',
             'description' => 'required',
-            'status' => ['required',Rule:: in(['Pending','In Progress','Done'])]
+            'status' => Rule:: in(['Pending','In Progress','Done'])
         ]);
         if ($validator->fails()) {
             return response()->json($validator->errors(),Response::HTTP_BAD_REQUEST);

@@ -18,7 +18,7 @@ class CreateTasksTable extends Migration
             $table->timestamps();
             $table->string('task_name');
             $table->text('description');
-            $table->string('status');
+            $table->string('status')->default('Pending');
         });
     }
 
