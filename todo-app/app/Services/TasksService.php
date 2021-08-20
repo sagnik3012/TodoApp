@@ -76,6 +76,13 @@ class TasksService{
     public function editTaskStatusById(Request $request , $id){
 
         $newStatus = $request->input('status');
+        $currentStatus = Tasks::where('id',$id)->get(['status']);
+
+
+        if ( $currentStatus[0]['status'] == "Done"){
+            return response()->json([
+                "message"=>" task with id = $id is already completed!"],Response::HTTP_BAD_REQUEST);
+        }
         if( !strcmp($newStatus ,"Pending") and !strcmp($newStatus ,"In Progress") and !strcmp($newStatus ,"Done") ){
             return  response()->json(["message" => "please check task status field and retry!"],Response::HTTP_BAD_REQUEST);
         }
@@ -85,6 +92,7 @@ class TasksService{
             return response()->json($e->errorInfo, Response::HTTP_BAD_REQUEST);
         }
         $updatedTask = Tasks::find($id);
+
         return  response()->json(["updated task" => $updatedTask],Response::HTTP_OK);
     }
 
