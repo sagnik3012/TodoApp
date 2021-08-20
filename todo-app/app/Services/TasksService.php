@@ -64,7 +64,7 @@ class TasksService{
     }
     public function getAllTasks(){
         try{
-            $tasks = Tasks::get();
+            $tasks = Tasks::orderBy('created_at','desc')->get();
         }catch (QueryException $e){
             return response()->json($e->errorInfo , Response::HTTP_BAD_REQUEST);
         }

@@ -20,7 +20,7 @@ class TaskController extends Controller
     }
 
     // create a task
-    public function CreateTask(Request $request){
+    public function createTask(Request $request){
 
         $validator = Validator::make($request->all(), [
             'task_name' => 'required|unique:tasks',
@@ -34,13 +34,13 @@ class TaskController extends Controller
         return $this->tasksService->createTask($request->input('task_name'),$request->input('description'),$request->input('status'));
     }
     // get a task by its id
-    public function GetTaskById( $id){
+    public function getTaskById( $id){
 
         return $this->tasksService->getTaskById($id);
 
     }
     // delete a task by its id
-    public function DeleteTaskById( $id){
+    public function deleteTaskById( $id){
 
         return $this->tasksService->deleteTaskById($id);
 
@@ -53,7 +53,7 @@ class TaskController extends Controller
 
     }
     // edit task status for a particular task
-    public function EditTaskStatusById( Request $request , $id){
+    public function editTaskStatusById( Request $request , $id){
         $validator = Validator::make($request->all(), [
             'status' => ['required',Rule:: in(['Pending','In Progress','Done'])]
         ]);
