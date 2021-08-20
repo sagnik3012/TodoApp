@@ -11,12 +11,12 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 class ExampleTest extends TestCase
 {
 
-    use DatabaseMigrations,RefreshDatabase;
+ //   use RefreshDatabase;
 
 
     public function testCreateTask()
     {
-        $response = $this->json('POST', '/task', ['task_name' => 'newTask',
+        $response = $this->json('POST', '/task', ['task_name' => 'test7Task',
             'description' => '1. Shampoo , 2. Fruits , 3. Vegetables',
             'status' => "Pending"]);
 
@@ -24,17 +24,17 @@ class ExampleTest extends TestCase
         $response->assertStatus(201)->assertExactJson([
             'created_at'=>null,
             'description' => '1. Shampoo , 2. Fruits , 3. Vegetables',
-            'id'=>1,
+            'id'=>7,
             'status' => 'Pending',
-            'task_name' => 'newTask',
+            'task_name' => 'test7Task',
             'updated_at'=>null
             ]);
 
     }
-/*    public function testGetTaskById()
+   public function testGetTaskById()
     {
 
-        $response = $this->json('GET', '/task/{id}', [], [1]);
+        $response = $this->json('GET', '/task/3', [] );
 
 
         $response->assertStatus(200)->assertJsonStructure([
@@ -47,13 +47,13 @@ class ExampleTest extends TestCase
                 ]
 
             ]);
-    }*/
+    }
 
     public function testDeleteTaskById()
     {
-        $this->json('DELETE', '/task/{id}', [], [100])
+        $this->json('DELETE', '/task/123', [])
             ->assertExactJson([
-                'message' => "task with id = {id} doesn't exist"
+                'message' => "task with id = 123 doesn't exist"
             ]);
     }
 
